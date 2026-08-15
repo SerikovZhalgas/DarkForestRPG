@@ -161,7 +161,7 @@ int main()
 		std::cout << "Level: " << player.level << "\n";
 		std::cout << "Rank: Veteran\n";
 	}
-	while (player.isAlive() && wolf.isAlive()) {
+	while (player.isAlive() && wolf.isAlive() && !isRunning) {
 		std::cout << "====================\n";
 		std::cout << "\nRound: " << round << "\n";
 		std::cout << "====================\n\n";
@@ -199,14 +199,17 @@ int main()
 			round++;
 			break;
 		case 4:
-			std::cout << "You are escaped!\n";
-			return 0;
+			std::cout << "You escaped from the battle!\n";
+			isRunning = true;
+			break;
 		default:
 			std::cout << "Invalid action!\n";
 			break;
 		}
 	}
-	if (player.isAlive()) {
+	if (isRunning) {
+		std::cout << "You have escaped from the battle!\n";
+	}else if (!wolf.isAlive()) {
 		std::cout << "You have defeated the " << wolf.name << "!\n";
 	}
 	else {
