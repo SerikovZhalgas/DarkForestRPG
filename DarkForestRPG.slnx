@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="DarkForestRPG/DarkForestRPG.vcxproj" Id="02d33fed-fac1-4d1b-992e-eb3ba50cd9e2" />
+</Solution>
