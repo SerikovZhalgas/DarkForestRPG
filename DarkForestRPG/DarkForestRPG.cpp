@@ -36,6 +36,11 @@ public:
 		: name(characterName)
 	{
 	}
+	
+	virtual ~Character() {
+		std::cout << "Character destructor\n";
+	};
+	
 	int getHealth() const
 	{
 		return health;
@@ -48,7 +53,7 @@ public:
 	{
 		return defense;
 	}
-	void takeDamage(int damage) {
+	virtual void takeDamage(int damage) {
 		health -= damage;
 		if (health <= 0) {
 			health = 0;
@@ -146,6 +151,35 @@ void Enemy::attackPlayer(Player& player)
 	printDamage(damage);
 	player.takeDamage(damage);
 }
+
+class Boss : public Character {
+public:
+	Boss(std::string bossName)
+		: Character(bossName)
+	{
+	}
+
+	~Boss() override
+	{
+		std::cout << "Boss desctructor\n";
+	}
+
+	void takeDamage(int damage) override {
+		std::cout << name << " blocks part of the damage!\n";
+
+		int reducedDamage = damage / 2;
+
+		health -= reducedDamage;
+
+		if (health <= 0) {
+			health = 0;
+			std::cout << name << " is dead!\n";
+		}
+		else {
+			std::cout << name << " health: " << health << "\n";
+		}
+	}
+};
 
 struct Combat {
 	Player& player;
@@ -246,6 +280,17 @@ int main()
 	Player player(playerName, age, level);
 	Enemy wolf("Wolf");
 	Combat combat(player, wolf);
+	Boss boss("Dragon");
+
+	Character* characters[] = { &player, &wolf, nullptr };
+	for (Character* character : characters) {
+		if (character) {
+			character->takeDamage(20);
+		}
+	}
+
+	Character* character = new Boss("Dragon");
+	delete character;
 
 	std::cout << "====================\n";
 	std::cout << "     Dark Forest RPG\n";
