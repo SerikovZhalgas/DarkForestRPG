@@ -25,17 +25,17 @@ void printDamage(const int& damage) {
 	std::cout << "Damage: " << damage << "\n";
 }
 
-class Player;
-
-class Enemy {
-private:
+class Character {
+protected:
 	int health = 100;
 	int attack = 25;
 	int defense = 10;
-
 public:
 	std::string name;
-
+	Character(std::string characterName)
+		: name(characterName)
+	{
+	}
 	int getHealth() const
 	{
 		return health;
@@ -48,7 +48,6 @@ public:
 	{
 		return defense;
 	}
-
 	void takeDamage(int damage) {
 		health -= damage;
 		if (health <= 0) {
@@ -59,40 +58,36 @@ public:
 			std::cout << name << " health: " << health << "\n";
 		}
 	}
-
 	bool isAlive() const {
 		return health > 0;
 	}
+};
 
+class Player;
+
+class Enemy : public Character {
+public:
 	void attackPlayer(Player& player);
 
 	Enemy(std::string enemyName)
-		: name(enemyName)
+		: Character(enemyName)
 	{
 	}
 };
 
-class Player {
+class Player : public Character {
 private:
-	int health = 100;
 	int stamina = 80;
 	int gold = 250;
-	int attack = 25;
-	int defense = 15;
 	bool defending = false;
 public:
-	std::string name;
 	int age;
 	int level;
 	Player(std::string playerName, int playerAge, int playerLevel)
-		: name(playerName),
+		: Character(playerName),
 		age(playerAge),
 		level(playerLevel)
 	{
-	}
-	int getHealth() const
-	{
-		return health;
 	}
 	int getStamina() const
 	{
@@ -102,20 +97,9 @@ public:
 	{
 		return gold;
 	}
-	int getAttack() const
-	{
-		return attack;
-	}
-	int getDefense() const
-	{
-		return defense;
-	}
 	bool isDefending() const
 	{
 		return defending;
-	}
-	bool isAlive() const {
-		return health > 0;
 	}
 	void resetDefending() {
 		defending = false;
@@ -128,16 +112,6 @@ public:
 		int damage = calculateDamage(attack, enemy.getDefense());
 		printDamage(damage);
 		enemy.takeDamage(damage);
-	}
-	void takeDamage(int damage) {
-		health -= damage;
-		if (health <= 0) {
-			health = 0;
-			std::cout << name << " is dead!\n";
-		}
-		else {
-			std::cout << "Player health: " << health << "\n";
-		}
 	}
 	bool heal() {
 		if (stamina >= 20) {
@@ -162,8 +136,9 @@ public:
 void Enemy::attackPlayer(Player& player)
 {
 	std::cout << name << " attacks " << player.name << "!\n";
-	int defense = player.isDefending() ? player.getDefense() * 2 : player.getDefense();
-	if (player.isDefending()) {
+	bool defending = player.isDefending();
+	int defense = defending ? player.getDefense() * 2 : player.getDefense();
+	if (defending) {
 		std::cout << player.name << " is defending!\n";
 		player.resetDefending();
 	}
@@ -188,6 +163,7 @@ struct Combat {
 	void start() {
 		while (player.isAlive() && enemy.isAlive() && !isRunning) {
 			showRoundInfo();
+
 
 			int action = showMenu();
 
