@@ -25,13 +25,29 @@ void printDamage(const int& damage) {
 	std::cout << "Damage: " << damage << "\n";
 }
 
-struct Player;
+class Player;
 
-struct Enemy {
-	std::string name;
+class Enemy {
+private:
 	int health = 100;
 	int attack = 25;
 	int defense = 10;
+
+public:
+	std::string name;
+
+	int getHealth() const
+	{
+		return health;
+	}
+	int getAttack() const
+	{
+		return attack;
+	}
+	int getDefense() const
+	{
+		return defense;
+	}
 
 	void takeDamage(int damage) {
 		health -= damage;
@@ -44,7 +60,7 @@ struct Enemy {
 		}
 	}
 
-	bool isAlive() {
+	bool isAlive() const {
 		return health > 0;
 	}
 
@@ -56,28 +72,60 @@ struct Enemy {
 	}
 };
 
-struct Player {
-	std::string name;
-	int age;
-	int level;
+class Player {
+private:
 	int health = 100;
 	int stamina = 80;
 	int gold = 250;
 	int attack = 25;
 	int defense = 15;
-	bool isDefending = false;
+	bool defending = false;
+public:
+	std::string name;
+	int age;
+	int level;
 	Player(std::string playerName, int playerAge, int playerLevel)
 		: name(playerName),
 		age(playerAge),
 		level(playerLevel)
 	{
 	}
-	bool isAlive() {
+	int getHealth() const
+	{
+		return health;
+	}
+	int getStamina() const
+	{
+		return stamina;
+	}
+	int getGold() const
+	{
+		return gold;
+	}
+	int getAttack() const
+	{
+		return attack;
+	}
+	int getDefense() const
+	{
+		return defense;
+	}
+	bool isDefending() const
+	{
+		return defending;
+	}
+	bool isAlive() const {
 		return health > 0;
+	}
+	void resetDefending() {
+		defending = false;
+	}
+	void startDefending() {
+		defending = true;
 	}
 	void attackEnemy(Enemy& enemy) {
 		std::cout << "Player attacks " << enemy.name << "!\n";
-		int damage = calculateDamage(attack, enemy.defense);
+		int damage = calculateDamage(attack, enemy.getDefense());
 		printDamage(damage);
 		enemy.takeDamage(damage);
 	}
@@ -91,7 +139,7 @@ struct Player {
 			std::cout << "Player health: " << health << "\n";
 		}
 	}
-	void heal() {
+	bool heal() {
 		if (stamina >= 20) {
 			health += 25;
 			stamina -= 20;
@@ -101,10 +149,12 @@ struct Player {
 			std::cout << name 
 				<< " healed! Health: " << health 
 				<< ", Stamina: " << stamina << "\n";
+			return true;
 		}
 		else {
 			std::cout << name 
 				<< " does not have enough stamina to heal!\n";
+			return false;
 		}
 	}
 };
@@ -112,15 +162,95 @@ struct Player {
 void Enemy::attackPlayer(Player& player)
 {
 	std::cout << name << " attacks " << player.name << "!\n";
-	int defense = player.isDefending ? player.defense * 2 : player.defense;
-	if (player.isDefending) {
+	int defense = player.isDefending() ? player.getDefense() * 2 : player.getDefense();
+	if (player.isDefending()) {
 		std::cout << player.name << " is defending!\n";
-		player.isDefending = false;
+		player.resetDefending();
 	}
 	int damage = calculateDamage(attack, defense);
 	printDamage(damage);
 	player.takeDamage(damage);
 }
+
+struct Combat {
+	Player& player;
+	Enemy& enemy;
+
+	int round = 1;
+	bool isRunning = false;
+
+	Combat(Player& combatPlayer, Enemy& combatEnemy)
+		: player(combatPlayer), 
+		enemy(combatEnemy)
+	{
+	}
+
+	void start() {
+		while (player.isAlive() && enemy.isAlive() && !isRunning) {
+			showRoundInfo();
+
+			int action = showMenu();
+
+			bool actionProcessed = processAction(action);
+			if (actionProcessed) {
+				if (!isRunning && enemy.isAlive() && player.isAlive())
+				{
+					enemyTurn();
+				}
+
+				round++;
+			}
+		}
+	}
+
+	void showRoundInfo() {
+		std::cout << "====================\n";
+		std::cout << "\nRound: " << round << "\n";
+		std::cout << "====================\n\n";
+	}
+
+	int showMenu() {
+		int action;
+		std::cout << "1. Attack\n";
+		std::cout << "2. Defend\n";
+		std::cout << "3. Heal\n";
+		std::cout << "4. Run\n";
+		std::cout << "Choose action: ";
+		std::cin >> action;
+		return action;
+	}
+
+	void enemyTurn()
+	{
+		if (enemy.isAlive())
+		{
+			enemy.attackPlayer(player);
+		}
+	}
+
+	bool processAction(int action)
+	{
+		switch (action)
+		{
+		case 1:
+			player.attackEnemy(enemy);
+			return true;
+		case 2:
+			std::cout << "You are defending.\n";
+			player.startDefending();
+			return true;
+		case 3:
+			return player.heal();
+		case 4:
+			std::cout << "You escaped from the battle!\n";
+			isRunning = true;
+			return false;
+		default:
+			std::cout << "Invalid action!\n";
+			return false;
+		}
+	}
+};
 
 int main()
 {
@@ -137,11 +267,9 @@ int main()
 	std::cout << "Enter your level: ";
 	std::cin >> level;
 
-	int round = 1;
-	bool isRunning = false;
-
 	Player player(playerName, age, level);
 	Enemy wolf("Wolf");
+	Combat combat(player, wolf);
 
 	std::cout << "====================\n";
 	std::cout << "     Dark Forest RPG\n";
@@ -161,77 +289,32 @@ int main()
 		std::cout << "Level: " << player.level << "\n";
 		std::cout << "Rank: Veteran\n";
 	}
-	while (player.isAlive() && wolf.isAlive() && !isRunning) {
-		std::cout << "====================\n";
-		std::cout << "\nRound: " << round << "\n";
-		std::cout << "====================\n\n";
-
-		int action;
-		std::cout << "1. Attack\n";
-		std::cout << "2. Defend\n";
-		std::cout << "3. Heal\n";
-		std::cout << "4. Run\n";
-		std::cout << "Choose action: ";
-		std::cin >> action;
-
-		switch (action) 
-		{
-		case 1:
-			player.attackEnemy(wolf);
-			if (wolf.isAlive()) {
-				wolf.attackPlayer(player);
-			}
-			round++;
-			break;
-		case 2:
-			std::cout << "You are defending.\n";
-			player.isDefending = true;
-			if (wolf.isAlive()) {
-				wolf.attackPlayer(player);
-			}
-			round++;
-			break;
-		case 3:
-			player.heal();
-			if (wolf.isAlive()) {
-				wolf.attackPlayer(player);
-			}
-			round++;
-			break;
-		case 4:
-			std::cout << "You escaped from the battle!\n";
-			isRunning = true;
-			break;
-		default:
-			std::cout << "Invalid action!\n";
-			break;
-		}
-	}
-	if (isRunning) {
+	combat.start();
+	if (combat.isRunning) {
 		std::cout << "You have escaped from the battle!\n";
-	}else if (!wolf.isAlive()) {
-		std::cout << "You have defeated the " << wolf.name << "!\n";
+	}else if (!combat.enemy.isAlive()) {
+		std::cout << "You have defeated the " << combat.enemy.name << "!\n";
 	}
 	else {
-		std::cout << "You have been defeated by the " << wolf.name << "!\n";
+		std::cout << "You have been defeated by the " << combat.enemy.name << "!\n";
 	}
-	std::cout << "\n\nHealth: " << player.health << "\n";
-	std::cout << "Wolf Health: " << wolf.health << "\n";
-	std::cout << "Stamina: " << player.stamina << "\n";
-	std::cout << "Gold: " << player.gold << "\n";
-	std::cout << "Attack: " << player.attack << "\n";
-	std::cout << "Defense: " << player.defense << "\n";
+	std::cout << "\n\nHealth: " << player.getHealth() << "\n";
+	std::cout << "Enemy Health: " << combat.enemy.getHealth() << "\n";
+	std::cout << "Stamina: " << player.getStamina() << "\n";
+	std::cout << "Gold: " << player.getGold() << "\n";
+	std::cout << "Attack: " << player.getAttack() << "\n";
+	std::cout << "Defense: " << player.getDefense() << "\n";
 	if (player.isAlive()) {
 		std::cout << player.name << ": Alive\n";
 	}
 	else {
 		std::cout << player.name << ": Dead\n";
 	}
-	if (!wolf.isAlive()) {
-		std::cout << wolf.name << ": Dead\n";
+	if (!combat.enemy.isAlive()) {
+		std::cout << combat.enemy.name << ": Dead\n";
 	}
 	else {
-		std::cout << wolf.name << ": Alive\n";
+		std::cout << combat.enemy.name << ": Alive\n";
 	}
 
 	return 0;
