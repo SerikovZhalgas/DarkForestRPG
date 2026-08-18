@@ -1,0 +1,23 @@
+#include "Enemy.h"
+#include "Player.h"
+#include "CombatUtils.h"
+#include <iostream>
+
+Enemy::Enemy(std::string enemyName)
+	: Character(enemyName)
+{
+}
+
+void Enemy::attackPlayer(Player& player)
+{
+	std::cout << name << " attacks " << player.name << "!\n";
+	bool defending = player.isDefending();
+	int defense = defending ? player.getDefense() * 2 : player.getDefense();
+	if (defending) {
+		std::cout << player.name << " is defending!\n";
+		player.resetDefending();
+	}
+	int damage = calculateDamage(attack, defense);
+	printDamage(damage);
+	player.takeDamage(damage);
+}
