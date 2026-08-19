@@ -1,6 +1,6 @@
 #pragma once
-class Player;
-class Enemy;
+#include "Player.h"
+#include "Enemy.h"
 
 class Combat {
 private:

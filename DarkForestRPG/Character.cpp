@@ -18,7 +18,7 @@ int Character::getHealth() const
 
 int Character::getAttack() const
 {
-    return attack;
+    return attackPower;
 }
 
 int Character::getDefense() const

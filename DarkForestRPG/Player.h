@@ -9,6 +9,7 @@ private:
 	int stamina = 80;
 	int gold = 250;
 	bool defending = false;
+
 public:
 	int age;
 	int level;

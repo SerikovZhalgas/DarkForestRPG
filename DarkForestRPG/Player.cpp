@@ -29,7 +29,9 @@ void Player::startDefending() {
 }
 void Player::attackEnemy(Enemy& enemy) {
 	std::cout << "Player attacks " << enemy.name << "!\n";
-	int damage = calculateDamage(attack, enemy.getDefense());
+
+	int damage = calculateDamage(attackPower, enemy.getDefense());
+
 	printDamage(damage);
 	enemy.takeDamage(damage);
 }

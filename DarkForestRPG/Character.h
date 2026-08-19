@@ -4,7 +4,7 @@
 class Character {
 protected:
 	int health = 100;
-	int attack = 25;
+	int attackPower = 25;
 	int defense = 10;
 
 public:

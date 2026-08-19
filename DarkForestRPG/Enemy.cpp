@@ -11,13 +11,20 @@ Enemy::Enemy(std::string enemyName)
 void Enemy::attackPlayer(Player& player)
 {
 	std::cout << name << " attacks " << player.name << "!\n";
+
 	bool defending = player.isDefending();
-	int defense = defending ? player.getDefense() * 2 : player.getDefense();
+
+	int defense = defending 
+		? player.getDefense() * 2 
+		: player.getDefense();
+
 	if (defending) {
 		std::cout << player.name << " is defending!\n";
 		player.resetDefending();
 	}
-	int damage = calculateDamage(attack, defense);
+
+	int damage = calculateDamage(attackPower, defense);
+
 	printDamage(damage);
 	player.takeDamage(damage);
 }

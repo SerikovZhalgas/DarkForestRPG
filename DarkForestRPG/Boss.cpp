@@ -1,8 +1,10 @@
 #include "Boss.h"
+#include "Player.h"
+#include "CombatUtils.h"
 #include <iostream>
 
 Boss::Boss(std::string bossName)
-	: Character(bossName)
+	: Enemy(bossName)
 {
 }
 
@@ -25,4 +27,28 @@ void Boss::takeDamage(int damage) {
 	else {
 		std::cout << name << " health: " << health << "\n";
 	}
+}
+
+void Boss::attackPlayer(Player& player) {
+	std::cout << name << " uses a heavy attack on " << player.name << "!\n";
+
+	bool defending = player.isDefending();
+
+	int defense = defending
+		? player.getDefense() * 2
+		: player.getDefense();
+
+	if (defending)
+	{
+		std::cout << player.name << " is defending!\n";
+		player.resetDefending();
+	}
+
+	int damage = calculateDamage(
+		attackPower + 10,
+		defense
+	);
+
+	printDamage(damage);
+	player.takeDamage(damage);
 }
