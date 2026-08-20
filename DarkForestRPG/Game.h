@@ -1,14 +1,18 @@
 #pragma once
 
 #include "Player.h"
-#include "Goblin.h"
+#include "Enemy.h"
 #include "Combat.h"
+#include <memory>
+#include <random>
 
 class Game {
 private:
     Player player;
-    Goblin enemy;
-    Combat combat;
+    std::unique_ptr<Enemy> enemy;
+    std::unique_ptr<Combat> combat;
+
+    std::mt19937 generator;
 
 public:
     Game(const std::string& playerName, int age, int level);
@@ -16,6 +20,7 @@ public:
     void run();
 
 private:
+    void createEnemy();
     void showPlayerInfo() const;
     void showResult() const;
 };

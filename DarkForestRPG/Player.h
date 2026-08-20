@@ -1,6 +1,10 @@
 #pragma once
 #include "Character.h"
+#include "Item.h"
+
 #include <string>
+#include <vector>
+#include <memory>
 
 class Enemy;
 
@@ -10,11 +14,14 @@ private:
 	int gold = 250;
 	bool defending = false;
 
+	std::vector<std::unique_ptr<Item>> inventory;
+
 public:
 	int age;
 	int level;
 
 	Player(std::string playerName, int playerAge, int playerLevel);
+	~Player();
 
 	int getStamina() const;
 	int getGold() const;
@@ -25,4 +32,7 @@ public:
 
 	void attackEnemy(Enemy& enemy);
 	bool heal();
+
+	void addItem(std::unique_ptr<Item> item);
+	void showInventory() const;
 };

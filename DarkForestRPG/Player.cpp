@@ -1,7 +1,9 @@
 #include "Player.h"
+#include "Item.h"
 #include "Enemy.h"
 #include "CombatUtils.h"
 #include <iostream>
+#include <utility>
 
 Player::Player(std::string playerName, int playerAge, int playerLevel)
 	: Character(playerName),
@@ -9,6 +11,7 @@ Player::Player(std::string playerName, int playerAge, int playerLevel)
 	level(playerLevel)
 {
 }
+Player::~Player() = default;
 int Player::getStamina() const
 {
 	return stamina;
@@ -51,5 +54,22 @@ bool Player::heal() {
 		std::cout << name
 			<< " does not have enough stamina to heal!\n";
 		return false;
+	}
+}
+void Player::addItem(std::unique_ptr<Item> item) {
+	inventory.push_back(std::move(item));
+}
+void Player::showInventory() const {
+	std::cout << "\nInventory:\n";
+
+	if (inventory.empty()) {
+		std::cout << "Inventory is empty.\n";
+		return;
+	}
+
+	for (const auto& item : inventory) {
+		std::cout << "- " 
+				  << item->getName() 
+				  << " (" << item->getValue() << " gold)\n";
 	}
 }
