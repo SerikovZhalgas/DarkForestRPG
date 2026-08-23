@@ -38,23 +38,26 @@ void Player::attackEnemy(Enemy& enemy) {
 	printDamage(damage);
 	enemy.takeDamage(damage);
 }
-bool Player::heal() {
-	if (stamina >= 20) {
-		health += 25;
-		stamina -= 20;
-		if (health > 100) {
-			health = 100;
-		}
-		std::cout << name
-			<< " healed! Health: " << health
-			<< ", Stamina: " << stamina << "\n";
-		return true;
-	}
-	else {
-		std::cout << name
-			<< " does not have enough stamina to heal!\n";
+bool Player::heal(int amount) {
+	if (amount <= 0) {
 		return false;
 	}
+	
+	int oldHealth = health;
+
+	health += amount;
+
+	if (health > 100) {
+		health = 100;
+	}
+
+	int healedAmount = health - oldHealth;
+
+	std::cout << name
+		<< " healed for " << healedAmount
+		<< "HP! Health: " << health << "\n";
+
+	return healedAmount > 0;
 }
 void Player::addItem(std::unique_ptr<Item> item) {
 	inventory.push_back(std::move(item));
@@ -67,9 +70,31 @@ void Player::showInventory() const {
 		return;
 	}
 
-	for (const auto& item : inventory) {
-		std::cout << "- " 
-				  << item->getName() 
-				  << " (" << item->getValue() << " gold)\n";
+	for (std::size_t i=0; i<inventory.size(); ++i) 
+	{
+		std::cout << i + 1 << ". " 
+				  << inventory[i]->getName() 
+				  << " (" << inventory[i]->getValue() 
+				  << " gold)\n";
 	}
+}
+bool Player::useItem(int index)
+{
+	if (index <= 0 || index > static_cast<int>(inventory.size()))
+	{
+		std::cout << "Invalid item choice!\n";
+		return false;
+	}
+
+	std::size_t itemIndex =
+		static_cast<std::size_t>(index - 1);
+
+	if (!inventory[itemIndex]->use(*this))
+	{
+		return false;
+	}
+
+	inventory.erase(inventory.begin() + itemIndex);
+
+	return true;
 }

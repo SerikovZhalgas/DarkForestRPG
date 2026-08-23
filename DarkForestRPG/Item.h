@@ -2,6 +2,8 @@
 
 #include <string>
 
+class Player;
+
 class Item {
 protected:
 	std::string name;
@@ -9,11 +11,10 @@ protected:
 
 public:
 	Item(std::string itemName, int itemValue);
-
 	virtual ~Item() = default;
 
 	const std::string& getName() const;
 	int getValue() const;
 
-	virtual void use() = 0; // Pure virtual function to be implemented by derived classes
+	virtual bool use(Player& player) = 0;
 };

@@ -23,4 +23,5 @@ private:
     int showMenu();
     void enemyTurn();
     bool processAction(int action);
+    void useItem();
 };

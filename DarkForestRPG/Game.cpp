@@ -20,7 +20,7 @@ void Game::run() {
 	
 	showPlayerInfo();
 
-	player.addItem(std::make_unique<Potion>("Health Potion", 10));
+	player.addItem(std::make_unique<Potion>("Health Potion", 100));
 	player.addItem(std::make_unique<Potion>("Mana Potion", 30));
 	player.showInventory();
 

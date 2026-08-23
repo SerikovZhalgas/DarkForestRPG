@@ -31,8 +31,9 @@ public:
 	void startDefending();
 
 	void attackEnemy(Enemy& enemy);
-	bool heal();
+	bool heal(int amount);
 
 	void addItem(std::unique_ptr<Item> item);
 	void showInventory() const;
+	bool useItem(int index);
 };

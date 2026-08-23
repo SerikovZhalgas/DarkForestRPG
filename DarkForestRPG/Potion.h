@@ -2,6 +2,8 @@
 
 #include "Item.h"
 
+class Player;
+
 class Potion : public Item {
 private:
 	int healAmount;
@@ -9,5 +11,5 @@ private:
 public:
 	Potion(std::string name, int amount);
 
-	void use() override;
+	bool use(Player& player) override;
 };

@@ -40,7 +40,8 @@ int Combat::showMenu() {
 	std::cout << "1. Attack\n";
 	std::cout << "2. Defend\n";
 	std::cout << "3. Heal\n";
-	std::cout << "4. Run\n";
+	std::cout << "4. Use Item\n";
+	std::cout << "5. Run\n";
 	std::cout << "Choose action: ";
 
 	std::cin >> action;
@@ -70,8 +71,13 @@ bool Combat::processAction(int action)
 		return true;
 
 	case 3:
-		return player.heal();
+		return player.heal(25);
+	
 	case 4:
+		useItem();
+		return true;
+	
+	case 5:
 		std::cout << "You escaped from the battle!\n";
 		isRunning = true;
 		return false;
@@ -90,4 +96,22 @@ bool Combat::hasEscaped() const
 const Enemy& Combat::getEnemy() const
 {
 	return enemy;
+}
+
+void Combat::useItem()
+{
+	player.showInventory();
+
+	int index;
+
+	std::cout << "Choose item (0 to cancel): ";
+	std::cin >> index;
+
+	if (index == 0)
+	{
+		std::cout << "You cancelled.\n";
+		return;
+	}
+
+	player.useItem(index);
 }
