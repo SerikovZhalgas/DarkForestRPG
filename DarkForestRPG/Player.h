@@ -7,6 +7,7 @@
 #include <memory>
 
 class Enemy;
+class Weapon;
 
 class Player : public Character {
 private:
@@ -15,6 +16,7 @@ private:
 	bool defending = false;
 
 	std::vector<std::unique_ptr<Item>> inventory;
+	std::unique_ptr<Weapon> equippedWeapon;
 
 public:
 	int age;
@@ -36,4 +38,7 @@ public:
 	void addItem(std::unique_ptr<Item> item);
 	void showInventory() const;
 	bool useItem(int index);
+	void addAttack(int amount);
+	bool equipWeapon(std::unique_ptr<Weapon> weapon);
+	const Weapon* getEquippedWeapon() const;
 };

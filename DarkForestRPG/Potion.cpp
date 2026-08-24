@@ -19,3 +19,7 @@ bool Potion::use(Player& player) {
 	
 	return true;
 }
+
+bool Potion::isConsumable() const {
+	return true;
+}

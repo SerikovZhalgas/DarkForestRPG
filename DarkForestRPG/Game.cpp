@@ -3,6 +3,7 @@
 #include "Goblin.h"
 #include "Enemy.h"
 #include "Potion.h"
+#include "Weapon.h"
 #include <iostream>
 #include <random>
 
@@ -20,9 +21,21 @@ void Game::run() {
 	
 	showPlayerInfo();
 
-	player.addItem(std::make_unique<Potion>("Health Potion", 100));
-	player.addItem(std::make_unique<Potion>("Mana Potion", 30));
+	player.addItem(std::make_unique<Potion>("Health Potion", 20));
+	player.addItem(
+		std::make_unique<Weapon>("Iron Sword", 10, 10)
+	);
+	player.addItem(
+		std::make_unique<Weapon>("Steel Sword", 20, 10)
+	);
 	player.showInventory();
+
+	if (player.getEquippedWeapon())
+	{
+		std::cout << "Equipped: "
+			<< player.getEquippedWeapon()->getName()
+			<< "\n";
+	}
 
 	combat->start();
 

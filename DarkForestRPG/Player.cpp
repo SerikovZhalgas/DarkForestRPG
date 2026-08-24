@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Item.h"
 #include "Enemy.h"
+#include "Weapon.h"
 #include "CombatUtils.h"
 #include <iostream>
 #include <utility>
@@ -89,12 +90,61 @@ bool Player::useItem(int index)
 	std::size_t itemIndex =
 		static_cast<std::size_t>(index - 1);
 
-	if (!inventory[itemIndex]->use(*this))
+	Item* item = inventory[itemIndex].get();
+
+	if (auto* weapon = dynamic_cast<Weapon*>(item))
+	{
+		if (equippedWeapon)
+		{
+			std::cout << "You already have a weapon equipped.\n";
+			return false;
+		}
+
+		std::unique_ptr<Weapon> weaponOwnership(
+			static_cast<Weapon*>(inventory[itemIndex].release())
+		);
+
+		inventory.erase(inventory.begin() + itemIndex);
+
+		return equipWeapon(std::move(weaponOwnership));
+	}
+
+	if (!item->use(*this))
 	{
 		return false;
 	}
 
-	inventory.erase(inventory.begin() + itemIndex);
+	if (item->isConsumable())
+	{
+		inventory.erase(inventory.begin() + itemIndex);
+	}
 
 	return true;
+}
+
+void Player::addAttack(int amount) {
+	attackPower += amount;
+}
+
+bool Player::equipWeapon(std::unique_ptr<Weapon> weapon) {
+	if (!weapon) {
+		return false;
+	}
+
+	if (equippedWeapon) {
+		std::cout << "You already have a weapon equipped.\n";
+		return false;
+	}
+
+	if (!weapon->use(*this)) {
+		return false;
+	}
+
+	equippedWeapon = std::move(weapon);
+
+	return true;
+}
+
+const Weapon* Player::getEquippedWeapon() const {
+	return equippedWeapon.get();
 }

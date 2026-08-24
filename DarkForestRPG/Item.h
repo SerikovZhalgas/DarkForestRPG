@@ -17,4 +17,5 @@ public:
 	int getValue() const;
 
 	virtual bool use(Player& player) = 0;
+	virtual bool isConsumable() const = 0;
 };
