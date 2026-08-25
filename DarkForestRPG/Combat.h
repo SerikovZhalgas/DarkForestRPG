@@ -17,6 +17,7 @@ public:
 
     bool hasEscaped() const;
     const Enemy& getEnemy() const;
+    void equipmentMenu();
 
 private:
     void showRoundInfo();

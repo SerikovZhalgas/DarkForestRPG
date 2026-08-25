@@ -1,6 +1,7 @@
 #pragma once
 #include "Character.h"
 #include "Item.h"
+#include "Equipment.h"
 
 #include <string>
 #include <vector>
@@ -8,6 +9,7 @@
 
 class Enemy;
 class Weapon;
+class Armor;
 
 class Player : public Character {
 private:
@@ -16,7 +18,7 @@ private:
 	bool defending = false;
 
 	std::vector<std::unique_ptr<Item>> inventory;
-	std::unique_ptr<Weapon> equippedWeapon;
+	Equipment equipment;
 
 public:
 	int age;
@@ -27,6 +29,8 @@ public:
 
 	int getStamina() const;
 	int getGold() const;
+	int getAttack() const override;
+	int getDefense() const override;
 
 	bool isDefending() const;
 	void resetDefending();
@@ -39,6 +43,13 @@ public:
 	void showInventory() const;
 	bool useItem(int index);
 	void addAttack(int amount);
+
 	bool equipWeapon(std::unique_ptr<Weapon> weapon);
-	const Weapon* getEquippedWeapon() const;
+	bool equipArmor(std::unique_ptr<Armor> armor);
+
+	const Equipment& getEquipment() const;
+	void showEquipment() const;
+
+	bool unequipWeapon();
+	bool unequipArmor();
 };

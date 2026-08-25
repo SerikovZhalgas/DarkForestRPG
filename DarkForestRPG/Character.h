@@ -14,8 +14,8 @@ public:
 	virtual ~Character();
 
 	int getHealth() const;
-	int getAttack() const;
-	int getDefense() const;
+	virtual int getAttack() const;
+	virtual int getDefense() const;
 
 	virtual void takeDamage(int damage);
 

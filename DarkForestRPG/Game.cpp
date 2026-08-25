@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "Potion.h"
 #include "Weapon.h"
+#include "Armor.h"
 #include <iostream>
 #include <random>
 
@@ -28,14 +29,13 @@ void Game::run() {
 	player.addItem(
 		std::make_unique<Weapon>("Steel Sword", 20, 10)
 	);
+	player.addItem(
+		std::make_unique<Armor>("Helmet", 50, 13)
+	);
+	player.addItem(
+		std::make_unique<Armor>("Sweet Helmet", 100, 1)
+	);
 	player.showInventory();
-
-	if (player.getEquippedWeapon())
-	{
-		std::cout << "Equipped: "
-			<< player.getEquippedWeapon()->getName()
-			<< "\n";
-	}
 
 	combat->start();
 

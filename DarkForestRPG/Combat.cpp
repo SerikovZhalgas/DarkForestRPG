@@ -41,7 +41,8 @@ int Combat::showMenu() {
 	std::cout << "2. Defend\n";
 	std::cout << "3. Heal\n";
 	std::cout << "4. Use Item\n";
-	std::cout << "5. Run\n";
+	std::cout << "5. Equipment\n";
+	std::cout << "6. Run\n";
 	std::cout << "Choose action: ";
 
 	std::cin >> action;
@@ -78,6 +79,10 @@ bool Combat::processAction(int action)
 		return true;
 	
 	case 5:
+		equipmentMenu();
+		return false;
+
+	case 6:
 		std::cout << "You escaped from the battle!\n";
 		isRunning = true;
 		return false;
@@ -114,4 +119,37 @@ void Combat::useItem()
 	}
 
 	player.useItem(index);
+}
+
+void Combat::equipmentMenu()
+{
+	player.showEquipment();
+
+	int action;
+
+	std::cout << "\n1. Unequip Weapon\n";
+	std::cout << "2. Unequip Armor\n";
+	std::cout << "0. Back\n";
+	std::cout << "Choose action: ";
+
+	std::cin >> action;
+
+	switch (action)
+	{
+	case 1:
+		player.unequipWeapon();
+		break;
+
+	case 2:
+		player.unequipArmor();
+		break;
+
+	case 0:
+		std::cout << "Back.\n";
+		break;
+
+	default:
+		std::cout << "Invalid action!\n";
+		break;
+	}
 }
