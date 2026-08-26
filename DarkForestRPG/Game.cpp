@@ -39,6 +39,12 @@ void Game::run() {
 
 	combat->start();
 
+	if (!combat->hasEscaped() && !enemy->isAlive())
+	{
+		giveRewards();
+		generateLoot();
+	}
+
 	showResult();
 }
 
@@ -78,12 +84,7 @@ void Game::showResult() const {
         std::cout << "You have been defeated by the " << enemy->name << "!\n";
     }
 
-    std::cout << "\n\nHealth: " << player.getHealth() << "\n";
-    std::cout << "Enemy Health: " << enemy->getHealth() << "\n";
-    std::cout << "Stamina: " << player.getStamina() << "\n";
-    std::cout << "Gold: " << player.getGold() << "\n";
-    std::cout << "Attack: " << player.getAttack() << "\n";
-    std::cout << "Defense: " << player.getDefense() << "\n";
+	player.showStats();
 
     if (player.isAlive())
     {
@@ -124,4 +125,70 @@ void Game::createEnemy() {
     }
 
 	combat = std::make_unique<Combat>(player, *enemy);
+}
+
+void Game::giveRewards()
+{
+	int xp = enemy->getXPReward();
+	int gold = enemy->getGoldReward();
+
+	std::cout << "\n=== Rewards ===\n";
+
+	player.addXP(xp);
+	player.addGold(gold);
+
+	std::cout << "Gold +" << gold << "\n";
+}
+
+void Game::generateLoot()
+{
+	std::uniform_int_distribution<int> chance(1, 100);
+
+	int roll = chance(generator);
+
+	if (roll > enemy->getLootChance())
+	{
+		std::cout << "No loot dropped.\n";
+		return;
+	}
+
+	std::uniform_int_distribution<int> itemRoll(0, 2);
+
+	switch (itemRoll(generator))
+	{
+	case 0:
+		player.addItem(
+			std::make_unique<Potion>(
+				"Health Potion",
+				25
+			)
+		);
+
+		std::cout << "Loot: Health Potion!\n";
+		break;
+
+	case 1:
+		player.addItem(
+			std::make_unique<Weapon>(
+				"Iron Sword",
+				100,
+				10
+			)
+		);
+
+		std::cout << "Loot: Iron Sword!\n";
+		break;
+
+	case 2:
+		player.addItem(
+			std::make_unique<Armor>(
+				"Leather Armor",
+				80,
+				5
+			)
+		);
+
+		std::cout << "Loot: Leather Armor!\n";
+		break;
+	}
 }

@@ -52,7 +52,7 @@ bool Player::heal(int amount) {
 
 	health += amount;
 
-	if (health > 100) {
+	if (health > maxHealth) {
 		health = 100;
 	}
 
@@ -258,5 +258,111 @@ void Player::showEquipment() const
 	else
 	{
 		std::cout << "Armor: None\n";
+	}
+}
+
+void Player::showStats() const
+{
+	std::cout << "\n=== Character ===\n";
+	std::cout << "Name: " << name << "\n";
+	std::cout << "Age: " << age << "\n";
+	std::cout << "Level: " << level << "\n";
+	std::cout << "XP:"
+			<< getXP()
+			<< "/"
+			<< getXPToNextLevel()
+			<< "\n";
+
+	std::cout << "Health: "
+		<< getHealth() << "/" << getMaxHealth() <<"\n";
+
+	std::cout << "Stamina: "
+		<< getStamina() << "/80\n";
+
+	std::cout << "Gold: "
+		<< getGold() << "\n";
+
+	std::cout << "Attack: "
+		<< getAttack() << "\n";
+
+	std::cout << "Defense: "
+		<< getDefense() << "\n";
+
+	if (equipment.getWeapon())
+	{
+		std::cout << "Weapon: "
+			<< equipment.getWeapon()->getName()
+			<< " (+"
+			<< equipment.getWeapon()->getAttackBonus()
+			<< ")\n";
+	}
+	else
+	{
+		std::cout << "Weapon: None\n";
+	}
+
+	if (equipment.getArmor())
+	{
+		std::cout << "Armor: "
+			<< equipment.getArmor()->getName()
+			<< " (+"
+			<< equipment.getArmor()->getDefenseBonus()
+			<< ")\n";
+	}
+	else
+	{
+		std::cout << "Armor: None\n";
+	}
+}
+
+int Player::getXP() const
+{
+	return xp;
+}
+
+int Player::getXPToNextLevel() const
+{
+	return level * 100;
+}
+
+void Player::addXP(int amount)
+{
+	if (amount <= 0)
+	{
+		return;
+	}
+
+	xp += amount;
+
+	std::cout << name
+		<< " gained "
+		<< amount
+		<< " XP!\n";
+
+	while (xp >= getXPToNextLevel())
+	{
+		xp -= getXPToNextLevel();
+
+		level++;
+
+		maxHealth += 10;
+		health = maxHealth;
+
+		attackPower += 2;
+		defense += 1;
+
+		std::cout << "\nLEVEL UP!\n";
+		std::cout << "Level: " << level << "\n";
+		std::cout << "Max Health +10\n";
+		std::cout << "Attack +2\n";
+		std::cout << "Defense +1\n";
+	}
+}
+
+void Player::addGold(int amount)
+{
+	if (amount > 0)
+	{
+		gold += amount;
 	}
 }

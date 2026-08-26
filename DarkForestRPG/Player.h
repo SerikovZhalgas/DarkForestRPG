@@ -13,6 +13,7 @@ class Armor;
 
 class Player : public Character {
 private:
+	int xp = 0;
 	int stamina = 80;
 	int gold = 250;
 	bool defending = false;
@@ -52,4 +53,11 @@ public:
 
 	bool unequipWeapon();
 	bool unequipArmor();
+
+	void showStats() const;
+
+	int getXP() const;
+	int getXPToNextLevel() const;
+	void addXP(int amount);
+	void addGold(int amount);
 };

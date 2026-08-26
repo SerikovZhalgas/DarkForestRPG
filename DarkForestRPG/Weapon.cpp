@@ -14,7 +14,6 @@ bool Weapon::use(Player& player) {
 		return false; // Indicate that the item was not used successfully
 	}
 
-	player.addAttack(attackBonus);
 	equipped = true;
 
 	std::cout << "Equipped " << name 

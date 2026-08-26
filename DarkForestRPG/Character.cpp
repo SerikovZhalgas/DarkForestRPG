@@ -16,6 +16,11 @@ int Character::getHealth() const
     return health;
 }
 
+int Character::getMaxHealth() const
+{
+    return maxHealth;
+}
+
 int Character::getAttack() const
 {
     return attackPower;

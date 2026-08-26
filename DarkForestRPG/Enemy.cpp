@@ -28,3 +28,23 @@ void Enemy::attackPlayer(Player& player)
 	printDamage(damage);
 	player.takeDamage(damage);
 }
+
+int Enemy::getXPReward() const
+{
+	return xpReward;
+}
+
+int Enemy::getLootChance() const
+{
+	return lootChance;
+}
+
+int Enemy::getGoldReward() const
+{
+	return goldReward;
+}
+
+bool Enemy::rollLoot() const
+{
+	return false;
+}

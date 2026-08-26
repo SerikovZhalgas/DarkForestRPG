@@ -23,4 +23,6 @@ private:
     void createEnemy();
     void showPlayerInfo() const;
     void showResult() const;
+    void giveRewards();
+    void generateLoot();
 };

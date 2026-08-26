@@ -4,6 +4,7 @@
 class Character {
 protected:
 	int health = 100;
+	int maxHealth = 100;
 	int attackPower = 25;
 	int defense = 10;
 
@@ -14,6 +15,7 @@ public:
 	virtual ~Character();
 
 	int getHealth() const;
+	int getMaxHealth() const;
 	virtual int getAttack() const;
 	virtual int getDefense() const;
 
