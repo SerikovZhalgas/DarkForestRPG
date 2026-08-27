@@ -150,6 +150,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Goblin.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="ItemFactory.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Potion.cpp" />
     <ClCompile Include="Weapon.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Goblin.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="ItemFactory.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Potion.h" />
     <ClInclude Include="Weapon.h" />

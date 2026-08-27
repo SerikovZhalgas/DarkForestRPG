@@ -5,6 +5,7 @@
 #include "Potion.h"
 #include "Weapon.h"
 #include "Armor.h"
+#include "ItemFactory.h"
 #include <iostream>
 #include <random>
 
@@ -152,43 +153,17 @@ void Game::generateLoot()
 		return;
 	}
 
-	std::uniform_int_distribution<int> itemRoll(0, 2);
+	auto item = ItemFactory::createRandomItem(generator);
 
-	switch (itemRoll(generator))
+	if (!item)
 	{
-	case 0:
-		player.addItem(
-			std::make_unique<Potion>(
-				"Health Potion",
-				25
-			)
-		);
-
-		std::cout << "Loot: Health Potion!\n";
-		break;
-
-	case 1:
-		player.addItem(
-			std::make_unique<Weapon>(
-				"Iron Sword",
-				100,
-				10
-			)
-		);
-
-		std::cout << "Loot: Iron Sword!\n";
-		break;
-
-	case 2:
-		player.addItem(
-			std::make_unique<Armor>(
-				"Leather Armor",
-				80,
-				5
-			)
-		);
-
-		std::cout << "Loot: Leather Armor!\n";
-		break;
+		std::cout << "Loot generation falied.\n";
+		return;
 	}
+
+	std::cout << "Loot: "
+		<< item->getName()
+		<< "!\n";
+
+	player.addItem(std::move(item));
 }
