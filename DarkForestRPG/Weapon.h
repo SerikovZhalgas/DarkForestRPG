@@ -10,7 +10,7 @@ private:
 	bool equipped = false;
 
 public:
-	Weapon(const std::string& itemName, int itemValue, int bonus);
+	Weapon(const std::string& itemName, int itemValue, int bonus, Rarity rarity);
 
 	bool use(Player& player) override;
 

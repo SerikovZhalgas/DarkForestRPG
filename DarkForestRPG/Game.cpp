@@ -23,18 +23,18 @@ void Game::run() {
 	
 	showPlayerInfo();
 
-	player.addItem(std::make_unique<Potion>("Health Potion", 20));
+	player.addItem(std::make_unique<Potion>("Health Potion", 20, Rarity::Common));
 	player.addItem(
-		std::make_unique<Weapon>("Iron Sword", 10, 10)
+		std::make_unique<Weapon>("Iron Sword", 10, 10, Rarity::Common)
 	);
 	player.addItem(
-		std::make_unique<Weapon>("Steel Sword", 20, 10)
+		std::make_unique<Weapon>("Steel Sword", 20, 10, Rarity::Epic)
 	);
 	player.addItem(
-		std::make_unique<Armor>("Helmet", 50, 13)
+		std::make_unique<Armor>("Helmet", 50, 13, Rarity::Common)
 	);
 	player.addItem(
-		std::make_unique<Armor>("Sweet Helmet", 100, 1)
+		std::make_unique<Armor>("Sweet Helmet", 100, 1, Rarity::Legendary)
 	);
 	player.showInventory();
 

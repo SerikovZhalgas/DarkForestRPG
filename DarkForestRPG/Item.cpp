@@ -1,8 +1,9 @@
 #include "Item.h"
 
-Item::Item(std::string itemName, int itemValue)
+Item::Item(std::string itemName, int itemValue, Rarity itemRarity)
 	: name(std::move(itemName)), 
-	value(itemValue) 
+	value(itemValue),
+	rarity(itemRarity)
 {
 }
 
@@ -12,4 +13,9 @@ const std::string& Item::getName() const {
 
 int Item::getValue() const {
 	return value;
+}
+
+Rarity Item::getRarity() const
+{
+	return rarity;
 }

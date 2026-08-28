@@ -9,7 +9,7 @@ private:
 	int healAmount;
 
 public:
-	Potion(std::string name, int amount);
+	Potion(std::string name, int amount, Rarity rarity);
 
 	bool use(Player& player) override;
 	bool isConsumable() const override;

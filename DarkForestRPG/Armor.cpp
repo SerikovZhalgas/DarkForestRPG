@@ -2,8 +2,8 @@
 #include "Player.h"
 #include <iostream>
 
-Armor::Armor(const std::string& itemName, int itemValue, int bonus)
-	: Item(itemName, itemValue),
+Armor::Armor(const std::string& itemName, int itemValue, int bonus, Rarity rarity)
+	: Item(itemName, itemValue, rarity),
 	defenseBonus(bonus)
 {
 }

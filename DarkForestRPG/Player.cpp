@@ -79,6 +79,9 @@ void Player::showInventory() const {
 	{
 		std::cout << i + 1 << ". " 
 				  << inventory[i]->getName() 
+				  << " ["
+				  << rarityToString(inventory[i]->getRarity())
+				  << "]"
 				  << " (" << inventory[i]->getValue() 
 				  << " gold)\n";
 	}

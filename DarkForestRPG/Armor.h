@@ -7,7 +7,7 @@ private:
 	int defenseBonus;
 
 public:
-	Armor(const std::string& itemName, int itemValue, int bonus);
+	Armor(const std::string& itemName, int itemValue, int bonus, Rarity rarity);
 
 	bool use(Player& player) override;
 	bool isConsumable() const override;
