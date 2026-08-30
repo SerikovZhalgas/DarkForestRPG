@@ -2,8 +2,13 @@
 #include "Player.h"
 #include <iostream>
 
-Potion::Potion(std::string name, int amount, Rarity rarity)
-	: Item(name, amount, rarity),
+Potion::Potion(
+	std::string name,
+	int itemValue,
+	int amount, 
+	Rarity rarity
+)
+	: Item(name, itemValue, rarity),
 	healAmount(amount)
 {
 }

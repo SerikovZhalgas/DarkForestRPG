@@ -4,12 +4,46 @@
 #include "Weapon.h"
 #include "Armor.h"
 #include "Rarity.h"
+#include "ItemData.h"
+#include "WeaponData.h"
+#include "ArmorData.h"
+#include "PotionData.h"
 
 #include <vector>
 #include <functional>
 
 namespace
 {
+    const PotionData smallPotionData{
+    "Small Potion",
+        50,
+        10
+    };
+
+    const PotionData healthPotionData{
+        "Health Potion",
+        100,
+        25
+    };
+
+    const WeaponData ironSwordData{
+        "Iron Sword",
+        100,
+        10
+    };
+
+    const ArmorData chainArmorData{
+        "Chain Armor",
+        150,
+        10
+    };
+
+    const WeaponData darkBladeData{
+        "Dark Blade",
+        400,
+        30
+    };
+
     struct LootEntry
     {
         int weight;
@@ -59,27 +93,6 @@ namespace
         return Rarity::Common;
     }
 
-    double getRarityMultiplier(Rarity rarity)
-    {
-        switch (rarity)
-        {
-        case Rarity::Common:
-            return 1.0;
-
-        case Rarity::Rare:
-            return 1.25;
-
-        case Rarity::Epic:
-            return 1.5;
-
-        case Rarity::Legendary:
-            return 2.0;
-
-        default:
-            return 1.0;
-        }
-    }
-
     std::vector<LootEntry> lootTable =
     {
         {
@@ -89,10 +102,20 @@ namespace
                 Rarity rarity = getRandomRarity(generator);
 
                 int healAmount =
-                    static_cast<int>(10 * getRarityMultiplier(rarity));
+                    static_cast<int>(
+                        smallPotionData.baseHeal * 
+                        rarityStatusMultiplier(rarity)
+                    );
+
+                int value =
+                    static_cast<int>(
+                        smallPotionData.baseValue *
+                        rarityValueMultiplier(rarity)
+                    );
 
                 return std::make_unique<Potion>(
-                    "Small Potion",
+                    smallPotionData.name,
+                    value,
                     healAmount,
                     rarity
                 );
@@ -106,10 +129,20 @@ namespace
                 Rarity rarity = getRandomRarity(generator);
 
                 int healAmount =
-                    static_cast<int>(25 * getRarityMultiplier(rarity));
+                    static_cast<int>(
+                        healthPotionData.baseHeal *
+                        rarityStatusMultiplier(rarity)
+                        );
+
+                int value =
+                    static_cast<int>(
+                        healthPotionData.baseValue *
+                        rarityValueMultiplier(rarity)
+                    );
 
                 return std::make_unique<Potion>(
-                    "Health Potion",
+                    healthPotionData.name,
+                    value,
                     healAmount,
                     rarity
                 );
@@ -123,13 +156,19 @@ namespace
                 Rarity rarity = getRandomRarity(generator);
 
                 int attackBonus =
-                    static_cast<int>(10 * getRarityMultiplier(rarity));
+                    static_cast<int>(
+                        ironSwordData.baseAttack * 
+                        rarityStatusMultiplier(rarity)
+                    );
 
                 int value =
-                    static_cast<int>(100 * getRarityMultiplier(rarity));
+                    static_cast<int>(
+                        ironSwordData.baseValue * 
+                        rarityValueMultiplier(rarity)
+                    );
 
                 return std::make_unique<Weapon>(
-                    "Iron Sword",
+                    ironSwordData.name,
                     value,
                     attackBonus,
                     rarity
@@ -144,13 +183,19 @@ namespace
                 Rarity rarity = getRandomRarity(generator);
 
                 int defenseBonus =
-                    static_cast<int>(10 * getRarityMultiplier(rarity));
+                    static_cast<int>(
+                        chainArmorData.baseDefense * 
+                        rarityStatusMultiplier(rarity)
+                    );
 
                 int value =
-                    static_cast<int>(150 * getRarityMultiplier(rarity));
+                    static_cast<int>(
+                        chainArmorData.baseValue * 
+                        rarityValueMultiplier(rarity)
+                    );
 
                 return std::make_unique<Armor>(
-                    "Chain Armor",
+                    chainArmorData.name,
                     value,
                     defenseBonus,
                     rarity
@@ -165,13 +210,19 @@ namespace
                 Rarity rarity = getRandomRarity(generator);
 
                 int attackBonus =
-                    static_cast<int>(10 * getRarityMultiplier(rarity));
+                    static_cast<int>(
+                        darkBladeData.baseAttack * 
+                        rarityStatusMultiplier(rarity)
+                    );
 
                 int value =
-                    static_cast<int>(100 * getRarityMultiplier(rarity));
+                    static_cast<int>(
+                        darkBladeData.baseValue * 
+                        rarityValueMultiplier(rarity)
+                    );
 
                 return std::make_unique<Weapon>(
-                    "Dark Blade",
+                    darkBladeData.name,
                     value,
                     attackBonus,
                     rarity

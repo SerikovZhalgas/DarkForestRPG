@@ -23,7 +23,7 @@ void Game::run() {
 	
 	showPlayerInfo();
 
-	player.addItem(std::make_unique<Potion>("Health Potion", 20, Rarity::Common));
+	player.addItem(std::make_unique<Potion>("Health Potion", 20, 20, Rarity::Common));
 	player.addItem(
 		std::make_unique<Weapon>("Iron Sword", 10, 10, Rarity::Common)
 	);
