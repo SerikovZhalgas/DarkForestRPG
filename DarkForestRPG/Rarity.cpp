@@ -49,9 +49,9 @@ const char* rarityToString(Rarity rarity)
 	return getRarityData(rarity).name;
 }
 
-double rarityStatusMultiplier(Rarity rarity)
+double rarityStatMultiplier(Rarity rarity)
 {
-	return getRarityData(rarity).statusMultiplier;
+	return getRarityData(rarity).statMultiplier;
 }
 
 double rarityValueMultiplier(Rarity rarity)
