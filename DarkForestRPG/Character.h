@@ -1,5 +1,7 @@
 #pragma once
+
 #include <string>
+#include <functional>
 
 class Character {
 protected:
@@ -7,6 +9,8 @@ protected:
 	int maxHealth = 100;
 	int attackPower = 25;
 	int defense = 10;
+	std::function<void(Character&)> onDeath;
+	std::function<void(Character&, int)> onHealthChanged;
 
 public:
 	std::string name;
@@ -22,4 +26,7 @@ public:
 	virtual void takeDamage(int damage);
 
 	bool isAlive() const;
+
+	void setOnDeath(std::function<void(Character&)> callback);
+	void setOnHealthChanged(std::function<void(Character&, int)> callback);
 };

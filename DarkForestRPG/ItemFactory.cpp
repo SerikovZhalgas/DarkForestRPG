@@ -68,6 +68,95 @@ namespace
         {5,  &ItemDatabase::darkBlade}
     };
 
+    int applyStatMultiplier(int baseValue, Rarity rarity)
+    {
+        return static_cast<int>(
+            baseValue * rarityStatMultiplier(rarity)
+            );
+    }
+
+    int applyValueMultiplier(int baseValue, Rarity rarity)
+    {
+        return static_cast<int>(
+            baseValue * rarityValueMultiplier(rarity)
+            );
+    }
+
+    std::unique_ptr<Item> createPotion(
+        const ItemDefinition& definition,
+        Rarity rarity
+    )
+    {
+        int healAmount =
+            applyStatMultiplier(
+                definition.baseStat,
+                rarity
+            );
+
+        int value =
+            applyValueMultiplier(
+                definition.baseValue,
+                rarity
+            );
+
+        return std::make_unique<Potion>(
+            definition.name,
+            value,
+            healAmount,
+            rarity
+        );
+    }
+
+    std::unique_ptr<Item> createWeapon(
+        const ItemDefinition& definition,
+        Rarity rarity
+    )
+    {
+        int attackBonus =
+            applyStatMultiplier(
+                definition.baseStat,
+                rarity
+            );
+
+        int value =
+            applyValueMultiplier(
+                definition.baseValue,
+                rarity
+            );
+
+        return std::make_unique<Weapon>(
+            definition.name,
+            value,
+            attackBonus,
+            rarity
+        );
+    }
+
+    std::unique_ptr<Item> createArmor(
+        const ItemDefinition& definition,
+        Rarity rarity
+    )
+    {
+        int defenseBonus =
+            applyStatMultiplier(
+                definition.baseStat,
+                rarity
+            );
+
+        int value =
+            applyValueMultiplier(
+                definition.baseValue,
+                rarity
+            );
+
+        return std::make_unique<Armor>(
+            definition.name,
+            value,
+            defenseBonus,
+            rarity
+        );
+    }
+
     std::unique_ptr<Item> createItem(
         const ItemDefinition& definition,
         std::mt19937& generator
@@ -89,81 +178,6 @@ namespace
         default:
             return nullptr;
         }
-    }
-
-    std::unique_ptr<Item> createPotion(
-        const ItemDefinition& definition,
-        Rarity rarity
-    )
-    {
-        int healAmount =
-            applyStatMultiplier(
-                definition.stat,
-                rarity
-            );
-
-        int value =
-            applyValueMultiplier(
-                definition.value,
-                rarity
-            );
-
-        return std::make_unique<Potion>(
-            definition.name,
-            value,
-            healAmount,
-            rarity
-        );
-    }
-
-    std::unique_ptr<Item> createWeapon(
-        const ItemDefinition & definition,
-        Rarity rarity
-    )
-    {
-        int attackBonus =
-            applyStatMultiplier(
-                definition.stat,
-                rarity
-            );
-
-        int value =
-            applyValueMultiplier(
-                definition.value,
-                rarity
-            );
-
-        return std::make_unique<Weapon>(
-            definition.name,
-            value,
-            attackBonus,
-            rarity
-        );
-    }
-
-    std::unique_ptr<Item> createArmor(
-        const ItemDefinition& definition,
-        Rarity rarity
-    )
-    {
-        int defenseBonus =
-            applyStatMultiplier(
-                definition.stat,
-                rarity
-            );
-
-        int value =
-            applyValueMultiplier(
-                definition.value,
-                rarity
-            );
-
-        return std::make_unique<Armor>(
-            definition.name,
-            value,
-            defenseBonus,
-            rarity
-        );
     }
 }
 
@@ -196,18 +210,4 @@ std::unique_ptr<Item> ItemFactory::createRandomItem(
     }
 
     return nullptr;
-}
-
-int applyStatMultiplier(int baseValue, Rarity rarity)
-{
-    return static_cast<int>(
-        baseValue * rarityStatMultiplier(rarity)
-    );
-}
-
-int applyValueMultiplier(int baseValue, Rarity rarity)
-{
-    return static_cast<int>(
-        baseValue * rarityValueMultiplier(rarity)
-    );
 }

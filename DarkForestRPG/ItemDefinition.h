@@ -15,7 +15,7 @@ struct ItemDefinition
 
 	const char* name;
 
-	int value;
+	int baseValue;
 
-	int stat;
+	int baseStat;
 };

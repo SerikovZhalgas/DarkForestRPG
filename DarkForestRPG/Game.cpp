@@ -14,6 +14,18 @@ Game::Game(const std::string& playerName, int age, int level)
 	generator(std::random_device{}())
 {
     createEnemy();
+
+	enemy->setOnHealthChanged(
+		[this](Character& character, int newHealth)
+		{
+			if (newHealth <= 25)
+			{
+				std::cout
+					<< character.name
+					<< " is low on health!\n";
+			}
+		}
+	);
 }
 
 void Game::run() {
@@ -37,6 +49,15 @@ void Game::run() {
 		std::make_unique<Armor>("Sweet Helmet", 100, 1, Rarity::Legendary)
 	);
 	player.showInventory();
+
+	enemy->setOnDeath(
+		[this](Character& deadCharacter) 
+		{
+			std::cout << "\nEvent: " 
+					  << deadCharacter.name 
+					  << " died!\n";
+		}
+	);
 
 	combat->start();
 
